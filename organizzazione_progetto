@@ -1,24 +1,24 @@
 Organizzazione lavoro e consigli:
 
-- process_citation_data: farlo insieme, pensare al miglior modo di salvare i dati in modo da avere algoritmi più efficienti nelle prossime funzioni => pensare prima a grandi linee alle prossime funzioni
+- process_citation_data: farlo insieme, pensare al miglior modo di salvare i dati in modo da avere algoritmi piÃ¹ efficienti nelle prossime funzioni => pensare prima a grandi linee alle prossime funzioni
 
 - do_citation_graph: farlo insieme, trovare un modo (se esiste) di creare il grafo con sintassi di alto livello, ovvero se esistono funzioni built-in in cui buttare i dati della funzione precedente. Se non si riesce bisogna costruirlo "a mano"
 
 - do_coupling: fare da soli, suddivere il problema in due sotto task:
 	1) cercare i due DOI tra i "data" in modo efficiente ( => pensare a come potrebbero essere i data in modo che la ricerca sia efficiente, serve per process_citation_data)
-	2) cercare tra le loro citazioni quelle uguali (hint: il metodo efficiente di ricerca è lo stesso usato per cercare i due DOI di prima)
+	2) cercare tra le loro citazioni quelle uguali (hint: il metodo efficiente di ricerca Ã¨ lo stesso usato per cercare i due DOI di prima)
 
 - do_aut_coupling: non ho capito bene cosa voglia ("cited by" mi confonde), comunque fare da soli e dividere il problema:
 	1) cercare i lavori dei due autori con una funzione dei regaz dell'anno scorso
 	2) ottenute le due liste dei lavori contare in modo efficiente i lavori non "coauthored"
 
-- do_aut_distance: fare insime perchè più difficile; dividere il problema:
-	1) capire se è meglio usare do_citation_graph per creare un grafo e poi estrapolare quello che ci serve, oppure se conviene ricrearlo dai data. Valutare solo l'efficienza.
+- do_aut_distance: fare insime perchÃ¨ piÃ¹ difficile; dividere il problema:
+	1) capire se Ã¨ meglio usare do_citation_graph per creare un grafo e poi estrapolare quello che ci serve, oppure se conviene ricrearlo dai data. Valutare solo l'efficienza.
 	2) farlo
 
 - do_find_cycles: fare insieme; da pensare prima:
 	1) conviene usare do_aut_distance per avere dei grafi su cui lavorare?
-	2) usare ricorsione? se sì baktracking/dynamic? possibilmente evitarla perchè lenta, difficile che si riesca a evitare secondo me cmq
+	2) usare ricorsione? se sÃ¬ baktracking/dynamic? possibilmente evitarla perchÃ¨ lenta, difficile che si riesca a evitare secondo me cmq
 
 - do_cit_count_year: fare da soli; suddividere in:
 	1) vedere le funzioni dei regaz dell'anno scorso
@@ -29,14 +29,14 @@ Suggerimenti:
 	- prima di fare qualsiasi cosa: studiare bene il progetto dell'anno scorso in modo da:
 		- saper usare poi le giuste funzioni
 		- vedere come hanno risolto/implementato certi problemi, magari torna utile
-		- vedere come hanno gestito il codice, come l'hanno suddiviso, com'è la sitassi, i nomi delle variabili e queste cose che riguardano più l'estetica del codice che altro
+		- vedere come hanno gestito il codice, come l'hanno suddiviso, com'Ã¨ la sitassi, i nomi delle variabili e queste cose che riguardano piÃ¹ l'estetica del codice che altro
 
-	- pensate prima fuori da python, pensate come se aveste le informazioni su carta e come se fossero milioni, solo così vi vengono idee su come trattare i dati in modo efficiente
+	- pensate prima fuori da python, pensate come se aveste le informazioni su carta e come se fossero milioni, solo cosÃ¬ vi vengono idee su come trattare i dati in modo efficiente
 	- una volta capito per quasi tutte le funzioni come gestire i dati, cercate un modo in python di implementare le cose
 	- per quando avrete prodotto qualcosa:
-		- fate una funzione che generi una mole enorme di dati (scriveteli su file così testate anche l'efficienza di process_citation_data)
+		- fate una funzione che generi una mole enorme di dati (scriveteli su file cosÃ¬ testate anche l'efficienza di process_citation_data)
 		- cercate la funzione built-in per cronometrare il codice
-		- fate dei test per vedere quanto va veloce e se si può ottimizzare e dove
+		- fate dei test per vedere quanto va veloce e se si puÃ² ottimizzare e dove
 		- attenzione che quando arriverete a fare i test avrete quasi finito il progetto quindi se vi vengono idee di algoritmi migliori ma totalmente diversi potrebbe essere tardi
 
 
