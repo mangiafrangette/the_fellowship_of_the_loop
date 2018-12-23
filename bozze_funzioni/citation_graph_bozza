@@ -24,3 +24,6 @@ def citation_graph(self, data, sse):
                         id2 = pretty_print[meta_dict]
                         cited_graph.add_node(id2)
                         cited_graph.add_edge(id, id2)
+                        
+                        
+                        
