@@ -42,10 +42,8 @@ def do_citation_graph(data, sse):
 
     for dict in data:
         if dict["known refs"]:
-            for id in dict["doi"]:
-                searched_doi = sse.search(id, "doi", False)
-                current_pretty_node = sse.pretty_print(searched_doi)[0]
-                print(dict["doi"])
+            searched_doi = sse.search(dict["doi"], "doi", False)
+            current_pretty_node = sse.pretty_print(searched_doi)[0]
 
             for ref in dict["known refs"].split("; "):
                 searched_ref = sse.search(ref, "doi", False)
