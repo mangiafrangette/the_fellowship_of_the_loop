@@ -59,7 +59,15 @@ def do_coupling(data, sse, doi_1, doi_2):
     return coupling_strength
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
-    return None
+    aut_coupling_list = []
+    for dict in sse.data:
+        if (aut_1 in dict["authors"].split("; ") and aut_2 not in dict["authors"].split("; ")) or (aut_2 in dict["authors"].split("; ") and aut_1 not in dict["authors"].split("; ")):
+           for dict2 in data:
+               if dict["doi"] == dict2["doi"] and dict2["known refs"]:
+                   aut_coupling_list.extend(dict2["known refs"].split("; "))
+    aut_coupling_set = set(aut_coupling_list)
+    aut_coupling_strength = len(aut_coupling_list) - len(aut_coupling_set)
+    return aut_coupling_strength
 
 
 def do_aut_distance(data, sse, aut):
