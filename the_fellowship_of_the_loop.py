@@ -51,18 +51,15 @@ def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il
 
     return cit_graph
 
-def do_coupling(data, sse, doi_1, doi_2): #funzionante ma da ottimizzare molto
+def do_coupling(data, sse, doi_1, doi_2): #ottimizzata usando un solo for e or
     coupling_strenght = 0
-    for dict1 in data:
-        if doi_1 == dict1["doi"] and dict1["known refs"]:
-            coupling_list = dict1["known refs"].split("; ")
-            for dict2 in data:
-                if doi_2 == dict2["doi"] and dict2["known refs"]:
-                    coupling_list.extend(dict2["known refs"].split("; "))
-                    coupling_set = set(coupling_list)
-                    coupling_strenght = len(coupling_list) - len(coupling_set)
+    coupling_list = []
+    for dict in data:
+        if doi_1 == dict["doi"] or doi_2 == dict["doi"] and dict["known refs"]:
+            coupling_list.extend(dict["known refs"].split("; "))
+        coupling_set = set(coupling_list)
+        coupling_strenght = len(coupling_list) - len(coupling_set)
     return coupling_strenght
-
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
     return None
