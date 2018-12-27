@@ -15,7 +15,7 @@
 
 # import the class 'ScholarlyNetworkEngine' from the local file 'sne.py'
 from sne import ScholarlySearchEngine, ScholarlyNetworkEngine
-
+import time 
 # create a new object of the class 'ScholarlyNetworkEngine' specifying the input CSV files to process
 #my_sne = ScholarlyNetworkEngine("metadata_sample.csv", "citation_sample.py")
 
@@ -25,6 +25,13 @@ my_sse = ScholarlySearchEngine("metadata_sample.csv")
 
 my_sne = ScholarlyNetworkEngine("metadata_sample.csv", "citations_sample.csv")
 my_graph = my_sne.citation_graph()
-print(my_graph.edges())
+#print(my_graph.edges())
 
+start = time.perf_counter()
+for dict1 in my_sse.data:
+    for dict2 in my_sse.data:
+        (my_sne.coupling(dict1["doi"], dict2["doi"]))
+end = time.perf_counter()
+print(end - start) # da start a qua printa il tempo
 
+print(my_sne.coupling("10.7717/peerj-cs.110", "10.7717/peerj-cs.147")) # questo printa il coupling_strenght
