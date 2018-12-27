@@ -36,13 +36,13 @@ def process_citation_data(file_path):
         data = [dict(row) for row in reader]
     return data
 
-def do_citation_graph(data, sse):
+def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il codice
     cit_graph = MultiDiGraph()
 
     for dict in data:
         if dict["known refs"]:
-            searched_doi = [ricerchina(sse, dict["doi"])]
-            current_pretty_node = sse.pretty_print(searched_doi)[0]
+            searched_doi = [ricerchina(sse, dict["doi"])] 
+            current_pretty_node = sse.pretty_print(searched_doi)[0] 
 
             for ref in dict["known refs"].split("; "):
                 searched_ref = [ricerchina(sse, ref)]
@@ -51,11 +51,16 @@ def do_citation_graph(data, sse):
 
     return cit_graph
 
-def do_coupling(data, sse, doi_1, doi_2):
+def do_coupling(data, sse, doi_1, doi_2): #funzionante ma da ottimizzare molto
     coupling_strenght = 0
-    for n in cit_graph.nodes_iter():
-            if cit_graph.has_edge(doi_1, n, key=None) and cit_graph.has_edge(doi_2, n, key=None):
-                coupling_strenght += 1
+    for dict1 in data:
+        if doi_1 == dict1["doi"] and dict1["known refs"]:
+            coupling_list = dict1["known refs"].split("; ")
+            for dict2 in data:
+                if doi_2 == dict2["doi"] and dict2["known refs"]:
+                    coupling_list.extend(dict2["known refs"].split("; "))
+                    coupling_set = set(coupling_list)
+                    coupling_strenght = len(coupling_list) - len(coupling_set)
     return coupling_strenght
 
 
