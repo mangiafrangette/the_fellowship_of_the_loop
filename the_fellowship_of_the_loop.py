@@ -51,14 +51,14 @@ def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il
 
     return cit_graph
 
-def do_coupling(data, sse, doi_1, doi_2): #ottimizzata usando un solo for e or
+def do_coupling(data, sse, doi_1, doi_2):
     coupling_strenght = 0
     coupling_list = []
     for dict in data:
         if doi_1 == dict["doi"] or doi_2 == dict["doi"] and dict["known refs"]:
             coupling_list.extend(dict["known refs"].split("; "))
-        coupling_set = set(coupling_list)
-        coupling_strenght = len(coupling_list) - len(coupling_set)
+    coupling_set = set(coupling_list)
+    coupling_strenght = len(coupling_list) - len(coupling_set)
     return coupling_strenght
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
