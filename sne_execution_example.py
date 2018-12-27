@@ -36,4 +36,5 @@ print(end - start) # da start a qua printa il tempo
 
 print(my_sne.coupling("10.7717/peerj-cs.110", "10.7717/peerj-cs.147")) # questo printa il coupling_strenght
 
-print(my_sne.aut_coupling("Tim, Clark", "Ariel, Rokem")) #printa il aut_coupling
+print(my_sne.aut_coupling("Tim, Clark", "Ariel, Rokem")) #printa aut_coupling
+print(my_sne.aut_coupling("Arfon M., Smith", "Ariel, Rokem")) #printa aut_coupling escludendo coauthroships
