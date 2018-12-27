@@ -28,7 +28,7 @@ from networkx import DiGraph, MultiDiGraph
 from ancillary_functions import *
 
 def process_citation_data(file_path):
-    with open("citations_sample.csv", 'r', encoding='utf-8') as csvfile:
+    with open(file_path, 'r', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         data = [dict(row) for row in reader]
     return data
