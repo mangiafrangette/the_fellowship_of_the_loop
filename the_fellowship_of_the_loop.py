@@ -28,7 +28,7 @@ from re import search
 from anytree import Node
 from collections import Counter
 from networkx import DiGraph, MultiDiGraph
-
+from ancillary_functions import *
 
 def process_citation_data(file_path):
     with open("citations_sample.csv", 'r', encoding='utf-8') as csvfile:
@@ -36,24 +36,27 @@ def process_citation_data(file_path):
         data = [dict(row) for row in reader]
     return data
 
-
 def do_citation_graph(data, sse):
     cit_graph = MultiDiGraph()
 
     for dict in data:
         if dict["known refs"]:
-            searched_doi = sse.search(dict["doi"], "doi", False)
+            searched_doi = [ricerchina(sse, dict["doi"])]
             current_pretty_node = sse.pretty_print(searched_doi)[0]
 
             for ref in dict["known refs"].split("; "):
-                searched_ref = sse.search(ref, "doi", False)
+                searched_ref = [ricerchina(sse, ref)]
                 pretty_ref_node = sse.pretty_print(searched_ref)[0]
                 cit_graph.add_edge(current_pretty_node, pretty_ref_node)
 
     return cit_graph
 
 def do_coupling(data, sse, doi_1, doi_2):
-    return None
+    coupling_strenght = 0
+    for n in cit_graph.nodes_iter():
+            if cit_graph.has_edge(doi_1, n, key=None) and cit_graph.has_edge(doi_2, n, key=None):
+                coupling_strenght += 1
+    return coupling_strenght
 
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
