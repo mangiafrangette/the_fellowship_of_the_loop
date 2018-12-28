@@ -38,3 +38,15 @@ print(my_sne.coupling("10.7717/peerj-cs.110", "10.7717/peerj-cs.147")) # questo 
 
 print(my_sne.aut_coupling("Tim, Clark", "Ariel, Rokem")) #printa aut_coupling
 print(my_sne.aut_coupling("Arfon M., Smith", "Ariel, Rokem")) #printa aut_coupling escludendo coauthroships
+
+# test di tempo per aut_coupling
+start = time.perf_counter()
+for dict_1 in my_sse.data:
+    for dict_2 in my_sse.data:
+        aut_split_1 = dict_1["authors"].split("; ")
+        aut_split_2 = dict_2["authors"].split("; ")
+        for item in aut_split_1:
+            for item2 in aut_split_2:
+                (my_sne.coupling(item, item2))
+end = time.perf_counter()
+print(end - start)
