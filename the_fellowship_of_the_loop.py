@@ -61,16 +61,22 @@ def do_coupling(data, sse, doi_1, doi_2):
     return coupling_strength
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
-    aut_coupling_list = []
+    aut_1_coupling_list = []
+    aut_2_coupling_list = []
     for dict in sse.data:
-        if (aut_1 in dict["authors"].split("; ") and aut_2 not in dict["authors"].split("; ")) or (aut_2 in dict["authors"].split("; ") and aut_1 not in dict["authors"].split("; ")):
-           for dict2 in data:
-               if dict["doi"] == dict2["doi"] and dict2["known refs"]:
-                   aut_coupling_list.extend(dict2["known refs"].split("; "))
-    aut_coupling_set = set(aut_coupling_list)
-    aut_coupling_strength = len(aut_coupling_list) - len(aut_coupling_set)
-    return aut_coupling_strength
+        aut_split = dict["authors"].split("; ")
+        if aut_1 in aut_split and aut_2 not in aut_split:
+            dict_citations1 = ricerchina2(data, dict["doi"])
+            if dict_citations1["known refs"]:
+                aut_1_coupling_list.extend(dict_citations1["known refs"].split("; "))
+        if aut_2 in aut_split and aut_1 not in aut_split:
+            dict_citations2 = ricerchina2(data, dict["doi"])
+            if dict_citations2["known refs"]:
+                aut_2_coupling_list.extend(dict_citations2["known refs"].split("; "))
+    intersection = set(aut_1_coupling_list).intersection(set(aut_2_coupling_list))
+    aut_coupling_strength = len(intersection)
 
+    return aut_coupling_strength
 
 def do_aut_distance(data, sse, aut):
     return None
