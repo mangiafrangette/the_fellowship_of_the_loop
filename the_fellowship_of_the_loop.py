@@ -53,7 +53,7 @@ def do_coupling(data, sse, doi_1, doi_2):
     for dict in data:
         if doi_1 == dict["doi"] and dict["known refs"]:
             coupling_list.extend(dict["known refs"].split("; "))
-        if doi_2 == dict["doi"] and dict["known refs"]:
+        elif doi_2 == dict["doi"] and dict["known refs"]:
             coupling_list.extend(dict["known refs"].split("; "))
     coupling_set = set(coupling_list)
     coupling_strength = len(coupling_list) - len(coupling_set)
