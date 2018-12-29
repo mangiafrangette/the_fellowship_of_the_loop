@@ -79,7 +79,20 @@ def do_aut_coupling(data, sse, aut_1, aut_2):
     return aut_coupling_strength
 
 def do_aut_distance(data, sse, aut):
-    return None
+    coauthors = list()
+    coauthors_graph = Graph()
+    coauthors_graph.add_node(aut)
+
+    for dict in sse.data:
+        if aut in dict['authors'].split('; '):
+            coauthors.extend(dict['authors'].split('; '))
+            coauthors.remove(aut)
+
+    counted_coauthors = Counter(coauthors).items()
+    for name, count in counted_coauthors:
+        coauthors_graph.add_edge(aut, name, co_authored_papers=count)
+
+    return coauthors_graph
 
 
 def do_find_cycles(data, sse):
