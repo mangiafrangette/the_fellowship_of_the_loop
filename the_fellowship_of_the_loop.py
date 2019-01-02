@@ -78,20 +78,33 @@ def do_aut_coupling(data, sse, aut_1, aut_2):
 
     return aut_coupling_strength
 
+
 def do_aut_distance(data, sse, aut):
-    coauthors = list()
+    coauthors_to_do = list()
+    coauthors_to_do.append(aut)
+    coauthors_done = set()
+    current_coauthors = []
     coauthors_graph = Graph()
     coauthors_graph.add_node(aut)
 
-    for dict in sse.data:
-        if aut in dict['authors'].split('; '):
-            coauthors.extend(dict['authors'].split('; '))
-            coauthors.remove(aut)
-
-    counted_coauthors = Counter(coauthors).items()
-    for name, count in counted_coauthors:
-        coauthors_graph.add_edge(aut, name, co_authored_papers=count)
-
+    while coauthors_to_do:
+        for a in coauthors_to_do:
+            if a not in coauthors_done:
+                for dict in sse.data:
+                    if a in dict['authors'].split('; '):
+                        current_coauthors.extend(dict['authors'].split('; '))
+                        current_coauthors.remove(a)
+                        coauthors_to_do.extend(current_coauthors)
+                counted_coauthors = Counter(current_coauthors).items()
+                for name, count in counted_coauthors:
+                    coauthors_graph.add_edge(a, name, co_authored_papers=count)
+                    current_coauthors.clear()
+                coauthors_to_do.remove(a)
+                coauthors_done.add(a)
+                number_edges = nx.shortest_path_length(coauthors_graph, source=a, target=aut)
+                coauthors_graph.add_node(a, distance=number_edges)
+            else:
+                coauthors_to_do.remove(a)
     return coauthors_graph
 
 
