@@ -55,5 +55,6 @@ print(end - start)
 aut_distance_graph = my_sne.aut_distance("Mark D., Wilkinson")
 print(aut_distance_graph.edges())
 print(aut_distance_graph.edges(data=True))
+print(aut_distance_graph.nodes(data=True))
 
 
