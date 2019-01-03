@@ -109,8 +109,35 @@ def do_aut_distance(data, sse, aut):
 
 
 def do_find_cycles(data, sse):
-    return None
+    citation_graph = do_citation_graph(data, sse)
+    cycles_list = []
+    cycles_list.extend(tuple(i) for i in list(nx.simple_cycles(citation_graph)))
+    return cycles_list
 
 
 def do_cit_count_year(data, sse, aut, year):
-    return None
+    result_cit_year = {}
+
+    if year:
+        for dict in sse.data:
+            if aut in dict["authors"].split("; ") and int(dict["year"]) >= year:
+                for dict2 in data:                                              # for lento per la storia di ricerchina2
+                    if dict["doi"] == dict2["doi"]:
+                        if int(dict["year"]) not in result_cit_year.keys():
+                            result_cit_year[int(dict["year"])] = 0
+                        result_cit_year[int(dict["year"])] += int(dict2["cited by"])
+        for year in range(int(year), max(result_cit_year)): # forse potresti trovare il max durante il ciclo e andare leggermente + veloce, provare
+            if year not in result_cit_year.keys():
+                    result_cit_year[year] = 0
+    else:
+        for dict in sse.data:
+            if aut in dict["authors"].split("; "):
+                for dict2 in data:
+                    if dict["doi"] == dict2["doi"]:
+                        if int(dict["year"]) not in result_cit_year.keys():
+                            result_cit_year[int(dict["year"])] = 0
+                        result_cit_year[int(dict["year"])] += int(dict2["cited by"])
+        for year in range(min(result_cit_year), max(result_cit_year)):
+            if year not in result_cit_year.keys():
+                    result_cit_year[year] = 0
+    return result_cit_year
