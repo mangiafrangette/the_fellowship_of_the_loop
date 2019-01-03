@@ -1,5 +1,5 @@
 import csv
-from collections import Counter
+from collections import Counter, defaultdict
 from networkx import nx, MultiDiGraph, Graph
 from ancillary_functions import *
 
