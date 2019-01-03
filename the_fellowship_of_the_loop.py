@@ -20,11 +20,8 @@
 # https://comp-think.github.io/2018-2019/slides/14%20-%20Project.html
 
 import csv
-from csv import DictReader
-from re import search
-from anytree import Node
 from collections import Counter
-from networkx import DiGraph, MultiDiGraph
+from networkx import nx, DiGraph, MultiDiGraph
 from ancillary_functions import *
 
 def process_citation_data(file_path):
@@ -32,6 +29,7 @@ def process_citation_data(file_path):
         reader = csv.DictReader(csvfile)
         data = [dict(row) for row in reader]
     return data
+
 
 def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il codice
     cit_graph = MultiDiGraph()
@@ -48,6 +46,7 @@ def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il
 
     return cit_graph
 
+
 def do_coupling(data, sse, doi_1, doi_2):
     coupling_list = []
     for dict in data:
@@ -59,6 +58,7 @@ def do_coupling(data, sse, doi_1, doi_2):
     coupling_strength = len(coupling_list) - len(coupling_set)
 
     return coupling_strength
+
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
     aut_1_coupling_list = []
@@ -75,7 +75,7 @@ def do_aut_coupling(data, sse, aut_1, aut_2):
                 aut_2_coupling_list.extend(dict_citations2["known refs"].split("; "))
     intersection = set(aut_1_coupling_list).intersection(set(aut_2_coupling_list))
     aut_coupling_strength = len(intersection)
-
+    
     return aut_coupling_strength
 
 
@@ -105,6 +105,7 @@ def do_aut_distance(data, sse, aut):
                 coauthors_graph.add_node(a, distance=number_edges)
             else:
                 coauthors_to_do.remove(a)
+    
     return coauthors_graph
 
 
@@ -112,6 +113,7 @@ def do_find_cycles(data, sse):
     citation_graph = do_citation_graph(data, sse)
     cycles_list = []
     cycles_list.extend(tuple(i) for i in list(nx.simple_cycles(citation_graph)))
+    
     return cycles_list
 
 
@@ -140,4 +142,5 @@ def do_cit_count_year(data, sse, aut, year):
         for year in range(min(result_cit_year), max(result_cit_year)):
             if year not in result_cit_year.keys():
                     result_cit_year[year] = 0
+    
     return result_cit_year
