@@ -15,46 +15,94 @@
 
 # import the class 'ScholarlyNetworkEngine' from the local file 'sne.py'
 from sne import ScholarlySearchEngine, ScholarlyNetworkEngine
-import time 
+import time
 # create a new object of the class 'ScholarlyNetworkEngine' specifying the input CSV files to process
 #my_sne = ScholarlyNetworkEngine("metadata_sample.csv", "citation_sample.py")
 
 # my_sne.<method> ...
 my_sse = ScholarlySearchEngine("metadata_sample.csv")
-#print(my_sse.coauthor_network("Tim, Clark"))
-
 my_sne = ScholarlyNetworkEngine("metadata_sample.csv", "citations_sample.csv")
-my_graph = my_sne.citation_graph()
-#print(my_graph.edges())
 
-start = time.perf_counter()
-for dict1 in my_sse.data:
-    for dict2 in my_sse.data:
-        (my_sne.coupling(dict1["doi"], dict2["doi"]))
-end = time.perf_counter()
-print(end - start) # da start a qua printa il tempo
-
-print(my_sne.coupling("10.7717/peerj-cs.110", "10.7717/peerj-cs.147")) # questo printa il coupling_strenght
-
-print(my_sne.aut_coupling("Tim, Clark", "Ariel, Rokem")) #printa aut_coupling
-print(my_sne.aut_coupling("Arfon M., Smith", "Ariel, Rokem")) #printa aut_coupling escludendo coauthroships
-
-# test di tempo per aut_coupling SBAGLIATO
-start = time.perf_counter()
-for dict_1 in my_sse.data:
-    for dict_2 in my_sse.data:
-        aut_split_1 = dict_1["authors"].split("; ")
-        aut_split_2 = dict_2["authors"].split("; ")
-        for item in aut_split_1:
-            for item2 in aut_split_2:
-                (my_sne.coupling(item, item2))
-end = time.perf_counter()
-print(end - start)
-
-#test solo per correttezza risultati di aut_distance
-aut_distance_graph = my_sne.aut_distance("Mark D., Wilkinson")
-print(aut_distance_graph.edges())
-print(aut_distance_graph.edges(data=True))
-print(aut_distance_graph.nodes(data=True))
+def test_citation_graph(my_sne):
+    start = time.perf_counter()
+    my_graph = my_sne.citation_graph()
+    end = time.perf_counter()
+    print(end - start)
+# outputs graph construction: 0.0006471999999999589, 0.0004990999999999746
+    start = time.perf_counter()
+    my_graph = my_sne.citation_graph()
+    my_graph.edges()
+    end = time.perf_counter()
+    print(end - start)
+# outputs getting edges: 0.0004309999999999592, 0.0004283000000000481
+    return my_graph
+# print(test_citation_graph(my_sne))
 
 
+def test_coupling(my_sne):
+    start = time.perf_counter()
+    for dict1 in my_sse.data:
+        for dict2 in my_sse.data:
+            my_sne.coupling(dict1["doi"], dict2["doi"])
+    end = time.perf_counter()
+    print(end - start)
+# outputs: 0.5619739, 0.5779999999999998
+    return my_sne
+# print(test_coupling(my_sne))
+
+
+def test_aut_coupling(my_sne):
+    start = time.perf_counter()
+    my_sne.aut_coupling("Mark D., Wilkinson", "Arfon M., Smith")
+    end = time.perf_counter()
+    print(end - start)
+    print(my_sne.aut_coupling("Mark D., Wilkinson", "Arfon M., Smith"))
+# outputs for Mark...: 0.0001841000000002424
+    start = time.perf_counter()
+    my_sne.aut_coupling("Bo, Xiao", "Chewei, Huang")
+    end = time.perf_counter()
+    print(end - start)
+    print(my_sne.aut_coupling("Bo, Xiao", "Chewei, Huang"))
+# outputsfor Bo...: 0.00012900000000004574
+    return my_sne
+# print(test_aut_coupling(my_sne))
+
+def test_aut_distance(my_sne):
+    start = time.perf_counter()
+    aut_distance_graph = my_sne.aut_distance("Mark D., Wilkinson")
+    end = time.perf_counter()
+    print(end - start)
+# outputs: 0.010217700000000107, 0.009736399999999978, 0.011074499999999987
+    start = time.perf_counter()
+    aut_distance_graph.edges.data("co_authored_papers")
+    end = time.perf_counter()
+    print(end - start)
+    print(aut_distance_graph.edges.data("co_authored_papers"))
+# outputs: 0.009627599999999958, 1.1999999999900979e-05
+    start = time.perf_counter()
+    aut_distance_graph.edges.data("distance")
+    end = time.perf_counter()
+    print(end - start)
+    print(aut_distance_graph.edges.data("distance"))
+# outputs: 0.01012040000000014, 8.89999999997837e-06
+    return aut_distance_graph
+# print(test_aut_distance(my_sne))
+
+def test_find_cycles(my_sne):
+    start = time.perf_counter()
+    my_sne.find_cycles()
+    end = time.perf_counter()
+    print(end - start)
+# outputs: 0.001483499999999971, 0.001196299999999928
+    return my_sne.find_cycles()
+# print(test_find_cycles(my_sne))
+
+def test_cit_count_year(my_sne):
+    start = time.perf_counter()
+    my_sne.cit_count_year("Michel, Dumontier", 2013)
+    end = time.perf_counter()
+    print(end - start)
+    
+# outputs: 0.0002022999999999886, 0.00018609999999996685
+    return my_sne.cit_count_year("Michel, Dumontier", 2013)
+# print(test_cit_count_year(my_sne))
