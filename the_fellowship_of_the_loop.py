@@ -19,17 +19,16 @@
 # which is not compliant at all with the specifications that have been provided at
 # https://comp-think.github.io/2018-2019/slides/14%20-%20Project.html
 
-import csv
+from csv import DictReader
 from collections import Counter
 from networkx import nx, DiGraph, MultiDiGraph
 from ancillary_functions import *
 
 def process_citation_data(file_path):
     with open(file_path, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = DictReader(csvfile)
         data = [dict(row) for row in reader]
     return data
-
 
 def do_citation_graph(data, sse): #spiegazione nel commit così non si sporca il codice
     cit_graph = MultiDiGraph()
