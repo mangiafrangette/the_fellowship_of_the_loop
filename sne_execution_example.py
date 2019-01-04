@@ -102,7 +102,6 @@ def test_cit_count_year(my_sne):
     my_sne.cit_count_year("Michel, Dumontier", 2013)
     end = time.perf_counter()
     print(end - start)
-    
 # outputs: 0.0002022999999999886, 0.00018609999999996685
     return my_sne.cit_count_year("Michel, Dumontier", 2013)
 # print(test_cit_count_year(my_sne))
