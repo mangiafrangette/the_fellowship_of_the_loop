@@ -24,3 +24,14 @@ def do_citation_graph(data, sse):
                 pretty_ref_node = sse.pretty_print(searched_ref)[0]
                 cit_graph.add_edge(current_pretty_node, pretty_ref_node)
     return cit_graph
+
+def do_coupling(data, sse, doi_1, doi_2):
+    coupling_list = []
+    coupling_strength = 0
+    if data[doi_1]["known refs"]:
+        coupling_list.extend(data[doi_1]["known refs"].split("; "))
+    if data[doi_2]["known refs"]:
+        coupling_list.extend(data[doi_2]["known refs"].split("; "))
+    coupling_set = set(coupling_list)
+    coupling_strength = len(coupling_list) - len(coupling_set)
+    return coupling_strength
