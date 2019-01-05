@@ -79,19 +79,25 @@ def test_coupling(my_sne):
 
 def test_aut_coupling(my_sne):
     start = time.perf_counter()
-    my_sne.aut_coupling("Mark D., Wilkinson", "Arfon M., Smith")
+    authors_set = set()
+    for dict in my_sne.sse.data:
+        authors_set.update(dict["authors"].split("; "))
+    for aut1 in authors_set:
+        for aut2 in authors_set:
+            my_sne.aut_coupling(aut1, aut2)
     end = time.perf_counter()
     print(end - start)
-    print(my_sne.aut_coupling("Mark D., Wilkinson", "Arfon M., Smith"))
-# outputs for Mark...: 0.0001841000000002424
-    start = time.perf_counter()
-    my_sne.aut_coupling("Bo, Xiao", "Chewei, Huang")
-    end = time.perf_counter()
-    print(end - start)
-    print(my_sne.aut_coupling("Bo, Xiao", "Chewei, Huang"))
-# outputsfor Bo...: 0.00012900000000004574
     return my_sne
 # print(test_aut_coupling(my_sne))
+# output for dicts: 17.49, 18.13, for lists: 75.66, 77.9
+
+#controllo correttezza risultati
+#list output for my_sne.aut_coupling("Dany, Vohl", "Jason J., Saleem")= 0
+#dict output for my_sne.aut_coupling("Dany, Vohl", "Jason J., Saleem")= 0
+# ---
+#list output for my_sne.aut_coupling("Arfon M., Smith", "Albert, Krewinkel")= 1
+#dict output for my_sne.aut_coupling("Arfon M., Smith", "Albert, Krewinkel")= 1
+
 
 def test_aut_distance(my_sne):
     start = time.perf_counter()
