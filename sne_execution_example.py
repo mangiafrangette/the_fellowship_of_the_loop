@@ -45,12 +45,12 @@ def test_citation_graph(my_sne):
 
 def test_coupling(my_sne):
     start = time.perf_counter()
-    for dict1 in my_sse.data:
-        for dict2 in my_sse.data:
-            my_sne.coupling(dict1["doi"], dict2["doi"])
+    for doi1 in my_sne.data:
+        for doi2 in my_sne.data:
+            my_sne.coupling(doi1, doi2)
     end = time.perf_counter()
     print(end - start)
-# outputs: 0.5619739, 0.5779999999999998
+# outputs: 0.5779999999999998, with dicts: 0.03266860000000005
     return my_sne
 # print(test_coupling(my_sne))
 
