@@ -42,17 +42,39 @@ def test_citation_graph(my_sne):
     return my_graph
 # print(test_citation_graph(my_sne))
 
-
-def test_coupling(my_sne):
+# for dicts version
+def test_coupling_dicts(my_sne):
     start = time.perf_counter()
     for doi1 in my_sne.data:
         for doi2 in my_sne.data:
             my_sne.coupling(doi1, doi2)
     end = time.perf_counter()
     print(end - start)
-# outputs: 0.5779999999999998, with dicts: 0.03266860000000005
+# outputs pc fra: 0.5779999999999998, with dicts: 0.02035980000000004
+    return my_sne
+print(test_coupling_dicts(my_sne))
+
+# for list version
+def test_coupling(my_sne):
+    start = time.perf_counter()
+    for doi1 in my_sse.data:
+        for doi2 in my_sse.data:
+            my_sne.coupling(doi1, doi2)
+    end = time.perf_counter()
+    print(end - start)
+# outputs pc fra: 0.5779999999999998, with dicts: 0.03266860000000005
     return my_sne
 # print(test_coupling(my_sne))
+
+# controllo correttezza risultati:
+# list_output for my_sne.coupling("10.7717/peerj-cs.86", "10.7717/peerj-cs.110") = 1
+# dicts_output for my_sne.coupling("10.7717/peerj-cs.86", "10.7717/peerj-cs.110") = 1
+# ---
+# list_output for my_sne.coupling("10.7717/peerj-cs.58", "10.7717/peerj-cs.14") = 0
+# dicts_output for my_sne.coupling("10.7717/peerj-cs.58", "10.7717/peerj-cs.14") = 0
+# ---
+# list_output for my_sne.coupling("10.7717/peerj-cs.78", "10.7717/peerj-cs.78") = 1
+# dicts_output for my_sne.coupling("10.7717/peerj-cs.78", "10.7717/peerj-cs.78") = 1
 
 
 def test_aut_coupling(my_sne):
