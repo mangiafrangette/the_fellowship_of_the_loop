@@ -35,3 +35,17 @@ def do_coupling(data, sse, doi_1, doi_2):
     coupling_set = set(coupling_list)
     coupling_strength = len(coupling_list) - len(coupling_set)
     return coupling_strength
+
+def do_aut_coupling(data, sse, aut_1, aut_2):
+    aut_1_coupling_list = []
+    aut_2_coupling_list = []
+    for dict_sse in sse.data:
+        if data[dict_sse["doi"]]["known refs"]:
+            aut_split = dict_sse["authors"].split("; ")
+            if aut_1 in aut_split and aut_2 not in aut_split:
+                aut_1_coupling_list.extend(data[dict_sse["doi"]]["known refs"].split("; "))
+            if aut_2 in aut_split and aut_1 not in aut_split:
+                aut_2_coupling_list.extend(data[dict_sse["doi"]]["known refs"].split("; "))
+    intersection = set(aut_1_coupling_list).intersection(set(aut_2_coupling_list))
+    aut_coupling_strength = len(intersection)
+    return aut_coupling_strength
