@@ -82,31 +82,31 @@ def do_aut_coupling(data, sse, aut_1, aut_2):
 
 
 def do_aut_distance(data, sse, aut):
-    coauthors_to_do = list()
-    coauthors_to_do.append(aut)
-    coauthors_done = set()
-    current_coauthors = []
+    coauthors_to_do = list()  # creates a list with all the authors we have to consider
+    coauthors_to_do.append(aut)  # appends the given author, since it is the first we consider
+    coauthors_done = set() # creates a set with all the authors already considered
+    current_coauthors = []  #creates a list with all the coauthors we can find in metadata of the author we consider
     coauthors_graph = Graph()
     coauthors_graph.add_node(aut)
 
-    while coauthors_to_do:
+    while coauthors_to_do:  # while list of coauthors has something
         for author in coauthors_to_do:
-            if author not in coauthors_done:
+            if author not in coauthors_done:  # this step allows us to skip repeating the same process for authors we already considered
                 for dict in sse.data:
-                    if author in dict['authors'].split('; '):
-                        current_coauthors.extend(dict['authors'].split('; '))
-                        current_coauthors.remove(author)
-                        coauthors_to_do.extend([coauthor for coauthor in current_coauthors if coauthor not in coauthors_to_do])
+                    if author in dict['authors'].split('; '):  # if author is in the value related to the key "authors" of the dict
+                        current_coauthors.extend(dict['authors'].split('; '))  # add all the splitted authors to the temporary list of the coauthors of the author i am considering
+                        current_coauthors.remove(author)  # remove author i am considering
+                        coauthors_to_do.extend([coauthor for coauthor in current_coauthors if coauthor not in coauthors_to_do])  # extend list of coauthors to consider with new coauthors if are not in
 
-                counted_coauthors = Counter(current_coauthors).items()
+                counted_coauthors = Counter(current_coauthors).items()  #counter creates a dict, so to access keys and values we need iems
                 for coauthor_name, count in counted_coauthors:
-                    if coauthor_name not in coauthors_done:
-                        coauthors_graph.add_edge(author, coauthor_name, co_authored_papers=count)
-                current_coauthors.clear()
-                coauthors_to_do.remove(author)
+                    if coauthor_name not in coauthors_done:  # if coauthor has already been considered author by the function the edge between them already exists
+                        coauthors_graph.add_edge(author, coauthor_name, co_authored_papers=count)  # the number of times a name appears in the list = number of papers they coauthored
+                current_coauthors.clear()  # empties the temporary list so we can use it with a new author
+                coauthors_to_do.remove(author) 
                 coauthors_done.add(author)
                 number_edges = nx.shortest_path_length(coauthors_graph, source=author, target=aut)
-                coauthors_graph.add_node(author, distance=number_edges)
+                coauthors_graph.add_node(author, distance=number_edges)  # updates information in the author's node, since the alg will pass through all coauthors, no need for iteration
             else:
                 coauthors_to_do.remove(author)
     return coauthors_graph
