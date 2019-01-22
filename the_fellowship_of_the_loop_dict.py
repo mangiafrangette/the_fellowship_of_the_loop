@@ -119,6 +119,9 @@ def do_cit_count_year(data, sse, aut, year):
     result_cit_year = {}
 
     if year:
+        if year > max([int(y["year"]) for y in sse.data]):
+            result_cit_year[year] = 0
+            return result_cit_year
         for dict in sse.data:
             if aut in dict["authors"].split("; ") and int(dict["year"]) >= year:
                 if int(dict["year"]) not in result_cit_year.keys():
