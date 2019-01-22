@@ -32,7 +32,7 @@ def process_citation_data(file_path):
         data = defaultdict(dict)  # our data structure: in defaultdict(dict) the values assigned to keys are dictionaries
         for row in reader:  # iteration over "rows" in .csv file
             data[row["doi"]] = dict(row)  # the keys of the macrodict are values contained under "doi" column. their values are subdictionaries.
-            data[row["doi"]]["known refs"] = set(data[row["doi"]]["known refs"].split()).difference({""})
+            data[row["doi"]]["known refs"] = set(data[row["doi"]]["known refs"].split("; ")).difference({""})
     return data
 
 
