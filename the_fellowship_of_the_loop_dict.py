@@ -20,6 +20,7 @@
 # https://comp-think.github.io/2018-2019/slides/14%20-%20Project.html
 
 from collections import *
+import datetime
 from csv import DictReader
 from collections import Counter
 from networkx import *
@@ -33,7 +34,6 @@ def process_citation_data(file_path):
         for row in reader:  # iteration over "rows" in .csv file
             data[row["doi"]] = dict(row)  # the keys of the macrodict are values contained under "doi" column. their values are subdictionaries.
             data[row["doi"]]["known refs"] = set(data[row["doi"]]["known refs"].split("; ")).difference({""})
-        print(data)
     return data
 
 
@@ -55,7 +55,7 @@ def do_citation_graph(data, sse):
 def do_coupling(data, sse, doi_1, doi_2):
     coupling_list = []
     coupling_strength = 0
-    if doi_1 in data and doi_2 in data:  # added in case the searched doi are not in data.
+    if doi_1 in data and doi_2 in data:  # added in case the searched doi are not in data. if one author is not present, the fun returns 0
         if data[doi_1]["known refs"]:
             coupling_list.extend(data[doi_1]["known refs"])  # add all the dois contained in known refs to coupling_list
         if data[doi_2]["known refs"]:
@@ -64,7 +64,7 @@ def do_coupling(data, sse, doi_1, doi_2):
         coupling_strength = len(coupling_list) - len(coupling_set)
         return coupling_strength
     else:
-        return "These DOIs are not in our database. The coupling strength is " + str(coupling_strength)
+        return coupling_strength
 
 
 def do_aut_coupling(data, sse, aut_1, aut_2):
@@ -117,6 +117,7 @@ def do_find_cycles(data, sse):
 
 def do_cit_count_year(data, sse, aut, year):
     result_cit_year = {}
+    now = datetime.datetime.now()
 
     if year:
         if year > max([int(y["year"]) for y in sse.data]):
@@ -127,7 +128,7 @@ def do_cit_count_year(data, sse, aut, year):
                 if int(dict["year"]) not in result_cit_year.keys():
                     result_cit_year[int(dict["year"])] = 0
                 result_cit_year[int(dict["year"])] += int(data[dict["doi"]]["cited by"])
-        for year in range(int(year), max(result_cit_year)): # forse potresti trovare il max durante il ciclo e andare leggermente + veloce, provare
+        for year in range(int(year), (now.year + 1)): # forse potresti trovare il max durante il ciclo e andare leggermente + veloce, provare
             if year not in result_cit_year.keys():
                     result_cit_year[year] = 0
     else:
@@ -136,7 +137,7 @@ def do_cit_count_year(data, sse, aut, year):
                 if int(dict["year"]) not in result_cit_year.keys():
                     result_cit_year[int(dict["year"])] = 0
                 result_cit_year[int(dict["year"])] += int(data[dict["doi"]]["cited by"])
-        for year in range(min(result_cit_year), max(result_cit_year)):
+        for year in range(min(result_cit_year), (now.year + 1)):
             if year not in result_cit_year.keys():
                     result_cit_year[year] = 0
     return result_cit_year
