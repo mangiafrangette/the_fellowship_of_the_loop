@@ -19,7 +19,6 @@
 # which is not compliant at all with the specifications that have been provided at
 # https://comp-think.github.io/2018-2019/slides/14%20-%20Project.html
 
-from collections import *
 import datetime
 from csv import DictReader
 from collections import Counter
@@ -30,7 +29,7 @@ def process_citation_data(file_path):
 
     with open(file_path, 'r', encoding='utf-8') as csvfile:  # csvfile it's a variable
         reader = DictReader(csvfile)  # DictReader it's a module needed for reading .csv files
-        data = defaultdict(dict)  # our data structure: in defaultdict(dict) the values assigned to keys are dictionaries
+        data = dict()  # our data structure is a dict where the values assigned to keys are dictionaries
         for row in reader:  # iteration over "rows" in .csv file
             data[row["doi"]] = dict(row)  # the keys of the macrodict are values contained under "doi" column. their values are subdictionaries.
             data[row["doi"]]["known refs"] = set(data[row["doi"]]["known refs"].split("; ")).difference({""})
