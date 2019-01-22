@@ -118,28 +118,28 @@ def do_find_cycles(data, sse):
 
 def do_cit_count_year(data, sse, aut, year):
     result_cit_year = {}
-    now = datetime.datetime.now()
+    now = datetime.datetime.now() #abbiamo importato il modulo datetime. la sintassi è fissa e richiamiamo l'anno nel body mettendo nomevariabile.year
 
-    if year:
-        if year > max([int(y["year"]) for y in sse.data]):
+    if year: #se year in input non è None (questo if gestirà: 1) dall'anno in input al current year 2) un anno maggiore del max year nel dataset
+        if year > max([int(y["year"]) for y in sse.data]): #se l'anno è maggiore del max year nel dataset ritorna {anno:0}. importante che sia maggiore del dataset e non del current year perché alcuni papers possono essere già dichiarati prima di essere pubblicati.
             result_cit_year[year] = 0
             return result_cit_year
-        for dict in sse.data:
-            if aut in dict["authors"].split("; ") and int(dict["year"]) >= year:
-                if int(dict["year"]) not in result_cit_year.keys():
-                    result_cit_year[int(dict["year"])] = 0
-                result_cit_year[int(dict["year"])] += int(data[dict["doi"]]["cited by"])
-        for year in range(int(year), (now.year + 1)): # forse potresti trovare il max durante il ciclo e andare leggermente + veloce, provare
+        for dict in sse.data: #iteriamo su metadata
+            if aut in dict["authors"].split("; ") and int(dict["year"]) >= year: #se trova l'autore in input e un anno >= di quello in input
+                if int(dict["year"]) not in result_cit_year.keys(): #e l'anno trovato non è già nelle keys del result dict
+                    result_cit_year[int(dict["year"])] = 0 #dai 0 come value all'anno trovato
+                result_cit_year[int(dict["year"])] += int(data[dict["doi"]]["cited by"]) #aggiorna la value a seconda dei cited by. da notare che confronta il "doi" di metadata con il "doi" di citations per poi accedere a livello di value ["cited by"] con la doppia quadra
+        for year in range(int(year), (now.year + 1)): #itera dall'anno in input (primo valore range) all'anno stop (sec val range) che sarà il current year (+1 perché range si ferma all'elemento prima della stop)
             if year not in result_cit_year.keys():
-                    result_cit_year[year] = 0
-    else:
+                    result_cit_year[year] = 0 #per tutti gli anni compresi fra anno input e current year, se questi anni non sono stati trovati nel dataset, dai value 0
+    else: #se input è None dovremmo dare tutti gli anni dalla prima pubblicazione al current year
         for dict in sse.data:
             if aut in dict["authors"].split("; "):
                 if int(dict["year"]) not in result_cit_year.keys():
                     result_cit_year[int(dict["year"])] = 0
                 result_cit_year[int(dict["year"])] += int(data[dict["doi"]]["cited by"])
-        for year in range(min(result_cit_year), (now.year + 1)):
-            if year not in result_cit_year.keys():
+        for year in range(min(result_cit_year), (now.year + 1)): #l'unica cosa che cambia è che ti prende dal minimo di result_cit_year, dunque degli anni del dataset fino a current year, perché a noi interessa la prima pubblicazione.
+            if year not in result_cit_year.keys(): #stessa cosa del blocco if
                     result_cit_year[year] = 0
     return result_cit_year
 
