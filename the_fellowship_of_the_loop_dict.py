@@ -91,23 +91,25 @@ def do_aut_distance(data, sse, aut):
     coauthors_graph.add_node(aut)
 
     while coauthors_to_do:
-        for a in coauthors_to_do:
-            if a not in coauthors_done:
+        for author in coauthors_to_do:
+            if author not in coauthors_done:
                 for dict in sse.data:
-                    if a in dict['authors'].split('; '):
+                    if author in dict['authors'].split('; '):
                         current_coauthors.extend(dict['authors'].split('; '))
-                        current_coauthors.remove(a)
-                        coauthors_to_do.extend(current_coauthors)
+                        current_coauthors.remove(author)
+                        coauthors_to_do.extend([coauthor for coauthor in current_coauthors if coauthor not in coauthors_to_do])
+
                 counted_coauthors = Counter(current_coauthors).items()
-                for name, count in counted_coauthors:
-                    coauthors_graph.add_edge(a, name, co_authored_papers=count)
-                    current_coauthors.clear()
-                coauthors_to_do.remove(a)
-                coauthors_done.add(a)
-                number_edges = nx.shortest_path_length(coauthors_graph, source=a, target=aut)
-                coauthors_graph.add_node(a, distance=number_edges)
+                for coauthor_name, count in counted_coauthors:
+                    if coauthor_name not in coauthors_done:
+                        coauthors_graph.add_edge(author, coauthor_name, co_authored_papers=count)
+                current_coauthors.clear()
+                coauthors_to_do.remove(author)
+                coauthors_done.add(author)
+                number_edges = nx.shortest_path_length(coauthors_graph, source=author, target=aut)
+                coauthors_graph.add_node(author, distance=number_edges)
             else:
-                coauthors_to_do.remove(a)
+                coauthors_to_do.remove(author)
     return coauthors_graph
 
 
