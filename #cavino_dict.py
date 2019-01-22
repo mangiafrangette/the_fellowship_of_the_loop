@@ -175,7 +175,7 @@ def do_find_cycles(data, sse):
     return [tuple(l) for l in list(networkx.simple_cycles(do_citation_graph(data, sse)))]
 
 
-def do_cit_count_year(data, sse, aut, year=None):
+def do_cit_count_year(data, sse, aut, year):
     result_dict = dict()
 
     for article in sse.data:
@@ -183,6 +183,6 @@ def do_cit_count_year(data, sse, aut, year=None):
             if article["year"] not in result_dict:
                 result_dict[article["year"]] = 0
             if aut in article["authors"].split("; "):
-                result_dict[article["year"]] += int(next(item for item in data if item["doi"] == article["doi"])["cited by"])
+                result_dict[article["year"]] += int(data[article["doi"]]["cited by"])
 
     return result_dict
